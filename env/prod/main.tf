@@ -1,19 +1,15 @@
-data "digitalocean_ssh_key" "default" {
-  name = "ondrej"
+module "project-demo" {
+  source = "../../modules/project-demo"
+  config = {
+    env          = "prod"
+    ssh_key_name = "ondrej"
+    vms = {
+      a = {}
+      b = {}
+    }
+  }
 }
 
-module "a" {
-  source = "../../modules/vm"
-  name   = "prod-a"
-  ssh_keys = [
-    data.digitalocean_ssh_key.default.id,
-  ]
-}
-
-module "b" {
-  source = "../../modules/vm"
-  name   = "prod-b"
-  ssh_keys = [
-    data.digitalocean_ssh_key.default.id,
-  ]
+output "ips" {
+  value = module.project-demo.ips
 }
