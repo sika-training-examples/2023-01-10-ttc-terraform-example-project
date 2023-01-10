@@ -4,6 +4,14 @@ data "digitalocean_ssh_key" "default" {
   name = var.config.ssh_key_name
 }
 
+module "db" {
+  source = "../../modules/vm"
+  name   = "${var.config.env}-db"
+  ssh_keys = [
+    data.digitalocean_ssh_key.default.id,
+  ]
+}
+
 module "vm" {
   for_each = var.config.vms
 
